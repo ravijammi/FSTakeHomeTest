@@ -1,0 +1,28 @@
+{
+  "name": "fstakehometest",
+  "version": "1.0.0",
+  "description": "Full Story Take Home Test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cypress:open": "cypress open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ravijammi/FSTakeHomeTest.git"
+  },
+  "keywords": [
+    "FullStory",
+    "TakeHome",
+    "Test"
+  ],
+  "author": "Ravi Jammi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ravijammi/FSTakeHomeTest/issues"
+  },
+  "homepage": "https://github.com/ravijammi/FSTakeHomeTest#readme",
+  "devDependencies": {
+    "cypress": "^10.2.0"
+  }
+}
