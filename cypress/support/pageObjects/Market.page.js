@@ -5,11 +5,11 @@ const MarketPage =  {
     },
 
     addBananasToCart (){
-        cy.get(':nth-child(1) > .fruit-box > .fruit-footer > .row > .text-right > .btn').click()
+        cy.get('.fruit-banans .cta-add-to-cart').click()
     },
 
-    addCocktailMixItem (){
-        cy.get(':nth-child(5) > .fruit-box > .fruit-footer > .row > .text-right > .btn').click()
+    addCocktailMixItemToCart (){
+        cy.get('.fruit-mixeddrink .cta-add-to-cart').click()
     },
 
 };

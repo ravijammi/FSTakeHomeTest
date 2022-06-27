@@ -5,7 +5,7 @@ const CartPage =  {
     },
 
     removeFirstItem () {
-        cy.get(':nth-child(2) > .row > .text-right > .glyphicon').click()
+        cy.get('li:nth-child(2) .text-danger').click()
     },
 };
 
