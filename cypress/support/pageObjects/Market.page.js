@@ -4,7 +4,7 @@ const MarketPage =  {
         cy.contains('My Cart').click()
     },
 
-    addBananasItem (){
+    addBananasToCart (){
         cy.get(':nth-child(1) > .fruit-box > .fruit-footer > .row > .text-right > .btn').click()
     },
 

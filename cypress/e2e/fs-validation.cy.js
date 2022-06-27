@@ -1,86 +1,63 @@
 /// <reference types="cypress" />
 
-import MarketPage from '../support/pageObjects/Market.page'
-import CartPage from '../support/pageObjects/Cart.page'
-import BasePage from '../support/pageObjects/Base.page'
-import CheckoutPage from '../support/pageObjects/Checkout.page'
+import marketPage from '../support/pageObjects/Market.page'
+import cartPage from '../support/pageObjects/Cart.page'
+import homePage from '../support/pageObjects/Home.page'
+import checkoutPage from '../support/pageObjects/Checkout.page'
 
 describe('FullStory recording', () => {
     it('Basic functionality is correctly recorded', () => {
 
-       cy.intercept('https://rs.fullstory.com/rec/bundle*').as('dataRecorded')
+       cy.intercept('https://rs.fullstory.com/rec/bundle*').as('fsData')
 
-        BasePage.visit()
-        BasePage.clickMarketButton()
-	//cy.wait('@dataRecorded').then(console.log)
-        cy.wait('@dataRecorded').then((interception) => {
-	    assert.isNotNull(interception.response.body, '1st Data recorded')
-            /*interception.should('have.property', 'Seq')
-            interception.should('have.property', 'When')
-            interception.should('have.property', 'Evts')*/
+        homePage.visit()
+        homePage.clickMarketButton()
+
+        cy.wait('@fsData').then((interceptedFSData) => {
+	    assert.isNotNull(interceptedFSData.response.body, '1st Data recorded')
         }) 
 
-        MarketPage.addBananasItem()
-	//cy.wait('@dataRecorded').then(console.log)
-        cy.wait('@dataRecorded').then((interception) => {
-	    let reqBody = interception.request.body
-	    console.log('Request Body: ' + reqBody.includes("\"Kind\":81978877"))
+        marketPage.addBananasToCart()
+
+        cy.wait('@fsData').then((interceptedFSData) => {
+	    let reqBody = interceptedFSData.request.body
+        console.log("Bananas Added to cart:" + reqBody)
 	    assert.isTrue(reqBody.includes("\"Kind\":8197"))
-	    //expect(reqBody.Evts).to.have.keys(['Kind'])
-	    //assert.property(reqBody, 'Seq')
-	     
-            /*interception.should('have.property', 'Seq')
-            interception.should('have.property', 'When')
-            interception.should('have.property', 'Evts')*/
         })
 
-        // MarketPage.addCocktailMixItem()
+        marketPage.addCocktailMixItem()
         
-        /* cy.wait('@dataRecorded').then((interception) => {
-            interception.should('have.property', 'Seq')
-            interception.should('have.property', 'When')
-            interception.should('have.property', 'Evts')
-        }) */
+        cy.wait('@fsData').then((interceptedFSData) => {
+	    let reqBody = interceptedFSData.request.body
+        assert.isTrue(reqBody.includes("\"Kind\":8197"))
+        })
         
-        // MarketPage.clickCartButton()
+        marketPage.clickCartButton()
         
-        /* cy.wait('@dataRecorded').then((interception) => {
-            interception.should('have.property', 'Seq')
-            interception.should('have.property', 'When')
-            interception.should('have.property', 'Evts')
-        }) */
+        cy.wait('@fsData').then((interceptedFSData) => {
+	    let reqBody = interceptedFSData.request.body
+            assert.isTrue(reqBody.includes("\"Kind\":37,\"Args\":[\"https://fruitshoppe.firebaseapp.com/#/cart\"]"))
+        })
         
-        // CartPage.removeFirstItem();
-        
-        /* cy.wait('@dataRecorded').then((interception) => {
-            interception.should('have.property', 'Seq')
-            interception.should('have.property', 'When')
-            interception.should('have.property', 'Evts')
-        }) */
-        
-        // CartPage.clickCheckoutButton()
+        cartPage.clickCheckoutButton()
 
-        /* cy.wait('@dataRecorded').then((interception) => {
-            interception.should('have.property', 'Seq')
-            interception.should('have.property', 'When')
-            interception.should('have.property', 'Evts')
-        }) */
+        cy.wait('@fsData').then((interceptedFSData) => {
+            let reqBody = interceptedFSData.request.body
+            assert.isTrue(reqBody.includes("\"Kind\":37,\"Args\":[\"https://fruitshoppe.firebaseapp.com/#/checkout\"]"))
+        })
 
-        // CheckoutPage.fillOutPurchaseInfo()
+        checkoutPage.fillOutPurchaseInfo()
+        cy.wait('@fsData').then((interceptedFSData) => {
+	    let reqBody = interceptedFSData.request.body
+	    console.log("PurchaseInfo:"+reqBody)
+	    console.log("Count:"+reqBody.match(/"Kind":18/g).length)
+        })
 
-        /* cy.wait('@dataRecorded').then((interception) => {
-            interception.should('have.property', 'Seq')
-            interception.should('have.property', 'When')
-            interception.should('have.property', 'Evts')
-        }) */
+        checkoutPage.clickPurchaseButton()
 
-        // CheckoutPage.clickPurchaseButton()
-
-        /* cy.wait('@dataRecorded').then((interception) => {
-            interception.should('have.property', 'Seq')
-            interception.should('have.property', 'When')
-            interception.should('have.property', 'Evts')
-        }) */
+        cy.wait('@fsData').then((interceptedFSData) => {
+	    assert.isTrue(interceptedFSData.request.body.includes("\"Kind\":37,\"Args\":[\"https://fruitshoppe.firebaseapp.com/#/confirm\"]"))
+        })
         
     })
 })
